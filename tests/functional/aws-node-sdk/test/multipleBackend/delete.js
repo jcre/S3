@@ -50,15 +50,15 @@ describe('Multiple backend delete', () => {
             s3.deleteObject({ Bucket: bucket, Key: memObject }, err => {
                 assert.strictEqual(err, null,
                     `Expected success, got error ${JSON.stringify(err)}`);
+                done();
             });
-            done();
         });
         it('should delete object from file', done => {
             s3.deleteObject({ Bucket: bucket, Key: fileObject }, err => {
                 assert.strictEqual(err, null,
                     `Expected success, got error ${JSON.stringify(err)}`);
+                done();
             });
-            done();
         });
     });
 });
