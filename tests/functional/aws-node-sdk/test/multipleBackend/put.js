@@ -143,7 +143,7 @@ describe('MultipleBackend put object based on bucket location', () => {
     });
 });
 
-describe.only('MultipleBackend put based on request endpoint', () => {
+describe('MultipleBackend put based on request endpoint', () => {
     withV4(sigCfg => {
         after(() => {
             process.stdout.write('Deleting bucket\n');
