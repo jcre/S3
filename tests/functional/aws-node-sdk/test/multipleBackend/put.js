@@ -1,6 +1,7 @@
 import assert from 'assert';
 import withV4 from '../support/withV4';
 import BucketUtility from '../../lib/utility/bucket-util';
+import config from '../../../../../lib/Config';
 
 const bucket = 'buckettestmultiplebackendput';
 const key = 'somekey';
@@ -142,9 +143,18 @@ describe('MultipleBackend put object based on bucket location', () => {
     });
 });
 
-describe('MultipleBackend put based on request endpoint', () => {
+describe.only('MultipleBackend put based on request endpoint', () => {
     withV4(sigCfg => {
-        before(done => {
+        after(() => {
+            process.stdout.write('Deleting bucket\n');
+            return bucketUtil.deleteOne(bucket)
+            .catch(err => {
+                process.stdout.write(`Error in after: ${err}\n`);
+                throw err;
+            });
+        });
+
+        it('should create bucket in corresponding backend', done => {
             bucketUtil = new BucketUtility('default', sigCfg);
             s3 = bucketUtil.s3;
             process.stdout.write('Creating bucket');
@@ -157,25 +167,14 @@ describe('MultipleBackend put based on request endpoint', () => {
                     process.stdout.write(`Error creating bucket: ${err}\n`);
                     throw err;
                 }
-                done();
-            });
-        });
-
-        after(() => {
-            process.stdout.write('Deleting bucket\n');
-            return bucketUtil.deleteOne(bucket)
-            .catch(err => {
-                process.stdout.write(`Error in after: ${err}\n`);
-                throw err;
-            });
-        });
-
-        it('bucket should be in file backend', done => {
-            s3.getBucketLocation({ Bucket: bucket }, (err, data) => {
-                assert.strictEqual(err, null, 'Expected succes, ' +
-                    `got error ${JSON.stringify(err)}`);
-                assert.strictEqual(data.LocationConstraint, 'file');
-                done();
+                const host = request.service.endpoint.hostname;
+                const endpoint = config.restEndpoints[host];
+                s3.getBucketLocation({ Bucket: bucket }, (err, data) => {
+                    assert.strictEqual(err, null, 'Expected succes, ' +
+                        `got error ${JSON.stringify(err)}`);
+                    assert.strictEqual(data.LocationConstraint, endpoint);
+                    done();
+                });
             });
         });
     });
