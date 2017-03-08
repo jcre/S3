@@ -33,8 +33,8 @@ const bucketPutRequest = {
     url: '/',
     post: '',
 };
-const locationConstraint = config.locationConstraints ? 'scality-us-west-1' :
-'us-west-1';
+const locationConstraint = config.regions ? 'us-west-1' :
+'scality-us-west-1';
 const objectKey = 'testObject';
 const initiateRequest = {
     bucketName,

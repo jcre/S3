@@ -71,16 +71,36 @@ describeSkipAWS('GET bucket location ', () => {
         });
 
         describe('without location configuration', () => {
-            afterEach(() => bucketUtil.deleteOne(bucketName));
-            before(done => s3.createBucketAsync({ Bucket: bucketName }, done));
-            it('should return empty location',
-            done => {
-                s3.getBucketLocation({ Bucket: bucketName },
-                (err, data) => {
-                    assert.strictEqual(err, null,
-                        `Found unexpected err ${err}`);
-                    assert.deepStrictEqual(data.LocationConstraint, '');
-                    return done();
+            after(() => {
+                process.stdout.write('Deleting bucket\n');
+                return bucketUtil.deleteOne(bucketName)
+                .catch(err => {
+                    process.stdout.write(`Error in after: ${err}\n`);
+                    throw err;
+                });
+            });
+
+            it('should return request endpoint as location', done => {
+                process.stdout.write('Creating bucket');
+                const request = s3.createBucket({ Bucket: bucketName });
+                request.on('build', () => {
+                    request.httpRequest.body = '';
+                });
+                request.send(err => {
+                    assert.strictEqual(err, null, 'Error creating bucket: ' +
+                        `${err}`);
+                    const host = request.service.endpoint.hostname;
+                    // if legacy config, 'us-east-1' is the default region,
+                    // which returns an empty string for getBucketLocation
+                    const endpoint = config.regions ? '' :
+                        config.restEndpoints[host];
+                    s3.getBucketLocation({ Bucket: bucketName },
+                    (err, data) => {
+                        assert.strictEqual(err, null, 'Expected succes, ' +
+                            `got error ${JSON.stringify(err)}`);
+                        assert.strictEqual(data.LocationConstraint, endpoint);
+                        done();
+                    });
                 });
             });
         });
@@ -90,7 +110,7 @@ describeSkipAWS('GET bucket location ', () => {
                 {
                     Bucket: bucketName,
                     CreateBucketConfiguration: {
-                        LocationConstraint: 'aws-us-east-1',
+                        LocationConstraint: 'scality-us-east-1',
                     },
                 }, done));
             after(() => bucketUtil.deleteOne(bucketName));

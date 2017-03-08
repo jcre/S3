@@ -36,8 +36,8 @@ const initiateRequest = {
 };
 const originalUsEastBehavior = config.usEastBehavior;
 const eastLocation = 'us-east-1';
-const westLocation = config.locationConstraints ? 'scality-us-west-1'
-: 'us-west-1';
+const westLocation = config.regions ? 'us-west-1'
+: 'scality-us-west-1';
 
 function _createAndAbortMpu(usEastSetting, fakeUploadID, locationConstraint,
     callback) {
