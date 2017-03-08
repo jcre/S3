@@ -65,7 +65,6 @@ const usersBucket = new BucketInfo(usersBucketName,
     userBucketOwner, userBucketOwner, creationDate);
 const locationConstraint = 'us-east-1';
 
-
 describe('transient bucket handling', () => {
     beforeEach(done => {
         cleanup();
