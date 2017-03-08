@@ -70,21 +70,6 @@ describeSkipAWS('GET bucket location ', () => {
             });
         });
 
-        describe('without location configuration', () => {
-            afterEach(() => bucketUtil.deleteOne(bucketName));
-            before(done => s3.createBucketAsync({ Bucket: bucketName }, done));
-            it('should return empty location',
-            done => {
-                s3.getBucketLocation({ Bucket: bucketName },
-                (err, data) => {
-                    assert.strictEqual(err, null,
-                        `Found unexpected err ${err}`);
-                    assert.deepStrictEqual(data.LocationConstraint, '');
-                    return done();
-                });
-            });
-        });
-
         describe('with location configuration', () => {
             before(done => s3.createBucketAsync(
                 {
