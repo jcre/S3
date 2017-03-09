@@ -56,7 +56,7 @@ describe('MultipleBackend put object', () => {
                 });
             });
 
-        describe('with set location from "x-amz-meta-scal-' +
+        describe.only('with set location from "x-amz-meta-scal-' +
             'location-constraint" header', () => {
             it('should return an error to put request without a valid ' +
                 'location constraint', done => {
