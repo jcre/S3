@@ -8,6 +8,7 @@ const key = 'somekey';
 const body = 'somestring';
 let bucketUtil;
 let s3;
+const itSkipIfE2E = process.env.S3_END_TO_END ? it.skip : it;
 
 
 describe('MultipleBackend put object', () => {
@@ -56,7 +57,7 @@ describe('MultipleBackend put object', () => {
                 });
             });
 
-        describe.only('with set location from "x-amz-meta-scal-' +
+        describe('with set location from "x-amz-meta-scal-' +
             'location-constraint" header', () => {
             it('should return an error to put request without a valid ' +
                 'location constraint', done => {
@@ -83,7 +84,7 @@ describe('MultipleBackend put object', () => {
                 });
             });
 
-            it('should put an object to file', done => {
+            itSkipIfE2E('should put an object to file', done => {
                 const params = { Bucket: bucket, Key: key,
                     Body: body,
                     Metadata: { 'scal-location-constraint': 'file' },
