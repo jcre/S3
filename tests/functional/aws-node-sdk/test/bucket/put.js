@@ -53,12 +53,14 @@ describe('PUT Bucket - AWS.S3.createBucket', () => {
         // usEastBehavior in the config.
         describeSkipIfOldConfig('create bucket twice', () => {
             beforeEach(done => bucketUtil.s3.createBucket({ Bucket:
-              bucketName }, done));
+              bucketName, CreateBucketConfiguration: {
+                  LocationConstraint: 'us-east-1',
+              } }, done));
             afterEach(done => bucketUtil.s3.deleteBucket({ Bucket: bucketName },
               done));
             // AWS JS SDK sends a request with locationConstraint us-east-1 if
             // no locationConstraint provided.
-            it('should return a 200 if no locationConstraints provided.',
+            it.skip('should return a 200 if no locationConstraints provided.',
             done => {
                 bucketUtil.s3.createBucket({ Bucket: bucketName }, done);
             });
