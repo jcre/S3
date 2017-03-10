@@ -14,11 +14,10 @@ const headers = {};
 const authInfo = makeAuthInfo('accessKey1');
 
 let normalBehaviorLocationConstraint = 'us-west-1';
-let specialBehaviorLocationConstraint = 'us-east-1';
+const specialBehaviorLocationConstraint = 'us-east-1';
 let itSkipIfNewConfig = it;
 if (config.locationConstraints) {
     normalBehaviorLocationConstraint = 'scality-us-west-1';
-    specialBehaviorLocationConstraint = 'scality-us-east-1';
     itSkipIfNewConfig = it.skip;
 }
 
