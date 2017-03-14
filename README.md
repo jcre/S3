@@ -1,4 +1,4 @@
-# S3 Server
+# Scality S3 Server
 
 ![S3 Server logo](res/Scality-S3-Server-Logo-Large.png)
 
@@ -17,7 +17,7 @@ https://github.com/scality/Guidelines/blob/master/CONTRIBUTING.md).
 
 ### Dependencies
 
-Building and running the S3 Server requires node.js 6.9.5 and npm v3
+Building and running the Scality S3 Server requires node.js 6.9.5 and npm v3
 . Up-to-date versions can be found at
 [Nodesource](https://github.com/nodesource/distributions).
 
@@ -70,6 +70,23 @@ npm run mem_backend
 This starts an S3 server on port 8000.
 The default access key is accessKey1 with
 a secret key of verySecretKey1.
+
+## Setting your own access key and secret key pairs
+
+You can set credentials for many accounts by editing `conf/authdata.json` but if
+you want to specify one set of your own credentials, you can use
+`SCALITY_ACCESS_KEY_ID` and `SCALITY_SECRET_ACCESS_KEY` environment variables.
+
+### SCALITY_ACCESS_KEY_ID and SCALITY_SECRET_ACCESS_KEY
+
+These variables specify authentication credentials for an account
+named "CustomAccount".
+
+Note: Anything in the `authdata.json` file will be ignored.
+
+```shell
+SCALITY_ACCESS_KEY_ID=newAccessKey SCALITY_SECRET_ACCESS_KEY=newSecretKey npm start
+```
 
 ## Run it for continuous integration testing or in production with Docker
 
@@ -168,6 +185,10 @@ const s3 = new aws.S3({
 #### [Cloud Explorer](https://www.linux-toys.com/?p=945)
 
 - https://www.youtube.com/watch?v=2hhtBtmBSxE
+
+#### [CloudBerry Lab](http://www.cloudberrylab.com)
+
+- https://youtu.be/IjIx8g_o0gY
 
 ### Command Line Tools
 
